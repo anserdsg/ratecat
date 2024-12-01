@@ -1,0 +1,128 @@
+syntax = "proto3";
+package api;
+option go_package = "github.com/anserdsg/ratecat/v1/proto";
+
+import "google/protobuf/timestamp.proto";
+
+enum ErrorCode {
+  // generic errors
+  OK                 = 0x0;
+  Unknown            = 0x1;
+  NotFound           = 0x2;
+  AlreadyExists      = 0x3;
+  OutOfRange         = 0x4;
+  // message errors
+  IncompletePacket   = 0x20;
+  InvalidMsg         = 0x21;
+  InvalidMagicNum    = 0x22;
+  InvalidLimiter     = 0x23;
+  EncodeFail         = 0x24;
+  DecodeFail         = 0x26;
+  // command/gRPC errors
+  ProcessFail        = 0x40;
+  ForwardFail        = 0x41;
+}
+
+message CmdError {
+  ErrorCode code = 1;
+  string msg = 2;
+}
+
+message CmdHeader {
+  string cmd = 1;
+}
+
+message NodeInfo {
+  uint32 id = 1;
+  string name = 2;
+  string api_endpoint = 3;
+  string grpc_endpoint = 4;
+  string type = 5;
+  bool leader = 6;
+  bool active = 7;
+  google.protobuf.Timestamp active_since = 8;
+}
+
+message MeowCmdResp {
+  uint32 node_id = 1;
+  repeated NodeInfo nodes = 2;
+}
+
+message AllowCmd {
+  string resource = 1;
+  uint32 events = 2;
+}
+
+message AllowCmdResp {
+  bool redirected = 1;
+  // it points to the redirected node if redirected field is true, otherwise it points to the current node
+  uint32 node_id = 2;
+  bool ok = 3;
+}
+
+enum LimiterType {
+  Null = 0;
+  TokenBucket = 1;
+  LeakyBucket = 2;
+}
+
+message RegResCmd {
+  string resource = 1;
+  LimiterType type = 2;
+  bool override = 3;
+  oneof option {
+    TokenBucketParam token_bucket= 4;
+  }
+}
+
+message RegResCmdResp {
+  uint32 node_id = 2;
+}
+
+message GetResCmd {
+  string resource = 1;
+}
+
+message Resource {
+  string name = 1;
+  uint32 node_id = 2;
+  LimiterType limiter_type = 3;
+  ReqPerSec rps = 4;
+  google.protobuf.Timestamp last_updated = 5;
+  oneof limiter {
+    api.TokenBucketLimiter token_bucket = 6;
+  };
+}
+
+message ReqPerSec {
+  uint32 req_count = 1;
+  repeated ReqPerSecEntry histories = 2;
+}
+
+message ReqPerSecEntry {
+  double rps = 1;
+  google.protobuf.Timestamp time = 2;
+}
+
+message TokenBucketParam {
+  double rate = 1;
+  uint32 burst = 2;
+}
+
+message TokenBucketLimiter {
+  double rate = 1;
+  uint32 burst = 2;
+  double token_count = 3;
+  int64 fill_period = 4;
+  google.protobuf.Timestamp last_filled = 5;
+  google.protobuf.Timestamp next_fill = 6;
+}
+
+message LeakyBucketLimiter {
+  double rate = 1;
+  uint32 capability = 2;
+  double drops = 3;
+  int64 drain_period = 4;
+  google.protobuf.Timestamp last_drained = 5;
+  google.protobuf.Timestamp next_drain = 6;
+}

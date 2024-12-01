@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package cluster;
+option go_package = "github.com/anserdsg/ratecat/v1/internal/cluster/pb";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "proto/ratecat_api_v1.proto";
+
+enum EntryAction {
+  PutResource           = 0;
+  RemoveResource        = 1;
+  UpdateResourceNodeId  = 2;
+  UpdateResourceLimiter = 3;
+}
+
+message Entry {
+  bytes id = 1; // unique identifier of the entry
+  EntryAction action = 2;
+  uint32 src_node_id = 3; // the source node id that send the entry
+  api.Resource resource = 4; // the resource metadata
+}
+
+message EntrySnapshot {
+  repeated Entry entries = 1;
+}
+
+
+message AvgRpsReq {
+  uint32 last_secs = 1;
+}
+
+message IsEntryAppliedReq {
+  bytes id = 1;
+}
+
+service Cluster {
+  rpc GetNodeInfo (google.protobuf.Empty) returns (api.NodeInfo) {}
+  rpc IsEntryApplied(IsEntryAppliedReq) returns (google.protobuf.BoolValue) {}
+  rpc GetAPICmdAvgRPS (AvgRpsReq) returns (google.protobuf.DoubleValue) {}
+  rpc RegisterResource (api.RegResCmd) returns (api.RegResCmdResp) {}
+  rpc Allow (api.AllowCmd) returns (api.AllowCmdResp) {}
+}
