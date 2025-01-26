@@ -43,7 +43,7 @@ func (r *repoClient) post(action Action) (*Response, error) {
 
 	req, err := http.NewRequest(http.MethodPost, r.target, bytes.NewBuffer(data))
 	req.Header.Set("Content-Type", "application/json; charset=UTF-8")
-
+	req.Header.Set("User-Agent", `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36`)
 	resp, err := r.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to post: %v", err)
