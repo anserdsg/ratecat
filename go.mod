@@ -1,8 +1,6 @@
 module github.com/anserdsg/ratecat/v1
 
-go 1.22.7
-
-toolchain go1.23.2
+go 1.23.2
 
 replace github.com/shaj13/raft => ../raft
 
