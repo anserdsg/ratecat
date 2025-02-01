@@ -10,7 +10,7 @@ tmp/*
 *.out
 *.test
 *.cov
-*.html
+# *.html
 *.csv
 
 data/
