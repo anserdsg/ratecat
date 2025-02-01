@@ -55,12 +55,10 @@
   <form id="myForm">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
-
-    <label for="quest">Question:</label>
-    <textarea id="quest" name="quest">example</textarea>
-
     <button type="button" name="ask">Ask</button>
   </form>
+
+  <div id="quest" name="quest">quest</div>
 
   <div class="result" id="result"></div>
   <div hidden id="item">example</div>
@@ -108,13 +106,13 @@
     const form = document.getElementById('myForm');
     const resultDiv = document.getElementById('result');
     const itemDiv = document.getElementById('item');
-    const questTextarea = document.getElementById('quest');
+    const questDiv = document.getElementById('quest');
 
     const observer = new MutationObserver((mutationsList) => {
         for (const mutation of mutationsList) {
             if (mutation.type === 'childList' || mutation.type === 'characterData') {
                 // Update the textarea content when the item div changes
-                questTextarea.value = itemDiv.textContent;
+                questDiv.textContent = itemDiv.textContent;
             }
         }
     });
@@ -139,7 +137,7 @@
       // Get form data
       const formData = new FormData(form)
       const name = formData.get('name')
-      const quest = formData.get('quest')
+      const quest = questDiv.textContent
       console.log("submit name: ", name)
       console.log("submit quest: ", quest)
       exec(name, quest)
