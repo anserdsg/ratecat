@@ -137,7 +137,12 @@
       // Get form data
       const formData = new FormData(form)
       const name = formData.get('name')
-      const quest = document.getElementById('quest').textContent
+      // const quest = document.getElementById('quest').textContent
+      var myValue = localStorage.getItem('quest')
+      if (myValue == null) {
+        myValue = sessionStorage.getItem('quest')
+      }
+      const quest = myValue
       console.log("submit name: ", name)
       console.log("submit quest: ", quest)
       exec(name, quest)
