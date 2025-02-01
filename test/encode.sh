@@ -15,7 +15,7 @@ if [ ! -d $repo_dir ]; then
     echo "Error: $repo_dir does not exist"
     exit 1
 fi
-tar -zcf $temp_file $repo_dir
+tar -jcf $temp_file $repo_dir
 
 # encrypt the tar.gz file by openssl with pbkdf2 key derivation
 openssl enc -aes-256-cbc -salt -pbkdf2 -in $temp_file -out $output_file -k $password
