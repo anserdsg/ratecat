@@ -144,7 +144,7 @@
           const resp = await fetchData(apiEndpoint, payload)
         }
 
-        resultDiv.textContent = 'Success!';
+        resultDiv.textContent = 'Success!, name:' + name + ', content:' + itemContent;
       } catch (error) {
         console.error('Error:', error.message);
         resultDiv.textContent = 'Error: ' + error.message;
