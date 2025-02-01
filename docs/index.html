@@ -59,7 +59,7 @@
     <label for="quest">Question:</label>
     <textarea id="quest" name="quest">example</textarea>
 
-    <button type="submit">Ask</button>
+    <button type="button" name="ask">Ask</button>
   </form>
 
   <div class="result" id="result"></div>
@@ -76,13 +76,16 @@
 
     async function fetchData(apiEndpoint, payload) {
       try {
+        const url = new URL(apiEndpoint);
+        Object.keys(payload).forEach(key => url.searchParams.append(key, payload[key]));
+        console.log("url: ", url)
         const response = await fetch(apiEndpoint, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             // Add other headers if needed (e.g., authorization)
           },
-          body: JSON.stringify(payload)
+          // body: JSON.stringify(payload)
         });
 
         if (!response.ok) {
@@ -106,8 +109,12 @@
     const resultDiv = document.getElementById('result');
 
 
-    form.addEventListener('submit', (event) => {
-      event.preventDefault()
+    form.addEventListener('click', (event) => {
+      console.log("event.target.tagName: ", event.target.tagName)
+      if (event.target.tagName !== 'BUTTON') {
+        return
+      }
+      // event.preventDefault()
 
       // Get form data
       const formData = new FormData(form)
