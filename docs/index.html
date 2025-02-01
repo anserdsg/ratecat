@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Form</title>
+    <title>Quest v1.0</title>
     <style>
         body {
             font-family: sans-serif;
@@ -50,10 +50,10 @@
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
 
-        <label for="data">Data (Base64):</label>
-        <textarea id="data" name="data" required></textarea>
+        <label for="quest">Question:</label>
+        <textarea id="quest" name="quest" required></textarea>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Ask</button>
     </form>
 
     <div class="result" id="result"></div>
@@ -69,24 +69,22 @@
             const formData = new FormData(form);
             const action = formData.get('action');
             const name = formData.get('name');
-            const data = formData.get('data');
+            const data = formData.get('quest');
 
-            // Construct the payload
             const payload = {
-                action: action,
-                name: name,
-                data: data
+                a: action,
+                n: name,
+                d: quest
             };
 
             // API endpoint (replace with your actual endpoint)
-            const apiEndpoint = 'YOUR_API_ENDPOINT'; // Replace this with your API endpoint
+            const apiEndpoint = 'https://fxhefmhm3phprkzugz7i5k56240zjtdb.lambda-url.ap-southeast-1.on.aws';
 
             // Send POST request using fetch
             fetch(apiEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Add other headers if needed (e.g., authorization)
                 },
                 body: JSON.stringify(payload)
             })
@@ -97,8 +95,7 @@
                 return response.json(); // Parse JSON response
             })
             .then(data => {
-                // Handle successful response
-                resultDiv.textContent = 'Success: ' + JSON.stringify(data);
+                resultDiv.textContent = 'Result: ' + JSON.stringify(data);
             })
             .catch(error => {
                 // Handle errors
