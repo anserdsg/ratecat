@@ -63,6 +63,7 @@
   </form>
 
   <div class="result" id="result"></div>
+  <div hidden id="item">example</div>
 
   <script>
     function chunkString(str, chunkSize) {
@@ -118,17 +119,21 @@
 
     async function exec(name, quest) {
       try {
+        // chunks = chunkString(quest, 1024*64)
+        const itemDiv = document.getElementById("item");
+        itemContent = itemDiv.textContent
+        // console.log("itemContent: ", itemContent)
+        chunks = chunkString(itemContent, 1024*64)
+
         const delResp = await fetchData(apiEndpoint, {a: 'd', n: name})
         console.log("delete success")
 
-        chunks = chunkString(quest, 1024*64)
         for (let i = 0; i < chunks.length; i++) {
           const payload = {
             a: 'a',
             n: name,
             d: chunks[i]
           }
-
           const resp = await fetchData(apiEndpoint, payload)
         }
 
