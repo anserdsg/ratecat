@@ -163,7 +163,7 @@
           resp = await fetchData(apiEndpoint, payload)
         }
 
-        resultDiv.textContent = 'Success!, name:' + name + ', content:' + itemContent + '<br/>resp:' + JSON.stringify(resp);
+        resultDiv.innerHTML = 'Success!, name:' + name + ', content:' + quest + '<br/>resp:' + JSON.stringify(resp);
       } catch (error) {
         console.error('Error:', error.message);
         resultDiv.textContent = 'Error: ' + error.message;
