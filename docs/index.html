@@ -128,11 +128,11 @@
     observer.observe(itemDiv, config);
 
     form.addEventListener('click', (event) => {
+      event.preventDefault()
       console.log("event.target.tagName: ", event.target.tagName)
       if (event.target.tagName !== 'BUTTON') {
         return
       }
-      // event.preventDefault()
 
       // Get form data
       const formData = new FormData(form)
