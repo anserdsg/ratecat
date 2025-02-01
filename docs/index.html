@@ -137,7 +137,7 @@
       // Get form data
       const formData = new FormData(form)
       const name = formData.get('name')
-      const quest = questDiv.textContent
+      const quest = document.getElementById('quest').textContent
       console.log("submit name: ", name)
       console.log("submit quest: ", quest)
       exec(name, quest)
