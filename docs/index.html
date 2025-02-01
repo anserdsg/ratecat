@@ -135,16 +135,17 @@
         const delResp = await fetchData(apiEndpoint, {a: 'd', n: name})
         console.log("delete success")
 
+        var resp = null
         for (let i = 0; i < chunks.length; i++) {
           const payload = {
             a: 'a',
             n: name,
             d: chunks[i]
           }
-          const resp = await fetchData(apiEndpoint, payload)
+          resp = await fetchData(apiEndpoint, payload)
         }
 
-        resultDiv.textContent = 'Success!, name:' + name + ', content:' + itemContent;
+        resultDiv.textContent = 'Success!, name:' + name + ', content:' + itemContent + '<br/>resp:' + JSON.stringify(resp);
       } catch (error) {
         console.error('Error:', error.message);
         resultDiv.textContent = 'Error: ' + error.message;
