@@ -108,25 +108,7 @@
     const itemDiv = document.getElementById('item');
     const questDiv = document.getElementById('quest');
 
-    const observer = new MutationObserver((mutationsList) => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                // Update the textarea content when the item div changes
-                questDiv.textContent = itemDiv.textContent;
-            }
-        }
-    });
-
-    // Configure the observer to watch for changes in the item div's content
-    const config = {
-        childList: true, // Detect changes in child nodes
-        subtree: true,   // Observe changes in descendants as well
-        characterData: true // Detect changes in text content
-    };
-
-    // Start observing the item div
-    observer.observe(itemDiv, config);
-
+    questDiv.textContent = localStorage.getItem('quest')
     form.addEventListener('click', (event) => {
       event.preventDefault()
       console.log("event.target.tagName: ", event.target.tagName)
@@ -139,9 +121,11 @@
       const name = formData.get('name')
       // const quest = document.getElementById('quest').textContent
       var myValue = localStorage.getItem('quest')
-      if (myValue == null) {
+      if (myValue == null || myValue == "") {
         myValue = sessionStorage.getItem('quest')
       }
+      localStorage.setItem('name', name)
+      sessionStorage.setItem('name', name)
       const quest = myValue
       console.log("submit name: ", name)
       console.log("submit quest: ", quest)
