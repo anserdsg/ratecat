@@ -79,7 +79,7 @@
         const url = new URL(apiEndpoint);
         Object.keys(payload).forEach(key => url.searchParams.append(key, payload[key]));
         console.log("url: ", url)
-        const response = await fetch(apiEndpoint, {
+        const response = await fetch(url, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -107,7 +107,27 @@
 
     const form = document.getElementById('myForm');
     const resultDiv = document.getElementById('result');
+    const itemDiv = document.getElementById('item');
+    const questTextarea = document.getElementById('quest');
 
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                // Update the textarea content when the item div changes
+                questTextarea.value = itemDiv.textContent;
+            }
+        }
+    });
+
+    // Configure the observer to watch for changes in the item div's content
+    const config = {
+        childList: true, // Detect changes in child nodes
+        subtree: true,   // Observe changes in descendants as well
+        characterData: true // Detect changes in text content
+    };
+
+    // Start observing the item div
+    observer.observe(itemDiv, config);
 
     form.addEventListener('click', (event) => {
       console.log("event.target.tagName: ", event.target.tagName)
@@ -121,16 +141,16 @@
       const name = formData.get('name')
       const quest = formData.get('quest')
       console.log("submit name: ", name)
+      console.log("submit quest: ", quest)
       exec(name, quest)
     })
 
     async function exec(name, quest) {
       try {
-        // chunks = chunkString(quest, 1024*64)
-        const itemDiv = document.getElementById("item");
-        itemContent = itemDiv.textContent
-        console.log("itemContent: ", itemContent)
-        chunks = chunkString(itemContent, 1024*64)
+        chunks = chunkString(quest, 1024*64)
+        // itemContent = itemDiv.textContent
+        // console.log("itemContent: ", itemContent)
+        // chunks = chunkString(itemContent, 1024*64)
 
         const delResp = await fetchData(apiEndpoint, {a: 'd', n: name})
         console.log("delete success")
