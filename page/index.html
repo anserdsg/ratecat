@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Form</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 150px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0b5ed7;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>GitHub Form</h1>
+
+    <form id="myForm">
+        <label for="action">Action:</label>
+        <input type="text" id="action" name="action" required>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="data">Data (Base64):</label>
+        <textarea id="data" name="data" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        const form = document.getElementById('myForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form data
+            const formData = new FormData(form);
+            const action = formData.get('action');
+            const name = formData.get('name');
+            const data = formData.get('data');
+
+            // Construct the payload
+            const payload = {
+                action: action,
+                name: name,
+                data: data
+            };
+
+            // API endpoint (replace with your actual endpoint)
+            const apiEndpoint = 'YOUR_API_ENDPOINT'; // Replace this with your API endpoint
+
+            // Send POST request using fetch
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add other headers if needed (e.g., authorization)
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse JSON response
+            })
+            .then(data => {
+                // Handle successful response
+                resultDiv.textContent = 'Success: ' + JSON.stringify(data);
+            })
+            .catch(error => {
+                // Handle errors
+                resultDiv.textContent = 'Error: ' + error.message;
+            });
+        });
+    </script>
+
+</body>
+</html>
