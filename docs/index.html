@@ -113,7 +113,7 @@
       const formData = new FormData(form)
       const name = formData.get('name')
       const quest = formData.get('quest')
-
+      console.log("submit name: ", name)
       exec(name, quest)
     })
 
@@ -122,7 +122,7 @@
         // chunks = chunkString(quest, 1024*64)
         const itemDiv = document.getElementById("item");
         itemContent = itemDiv.textContent
-        // console.log("itemContent: ", itemContent)
+        console.log("itemContent: ", itemContent)
         chunks = chunkString(itemContent, 1024*64)
 
         const delResp = await fetchData(apiEndpoint, {a: 'd', n: name})
