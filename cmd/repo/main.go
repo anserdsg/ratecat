@@ -17,6 +17,7 @@ type Action struct {
 	A string `json:"a"`
 	N string `json:"n"`
 	D string `json:"d"`
+	I int    `json:"i"`
 }
 
 type Response struct {
@@ -96,7 +97,7 @@ func (r *repoClient) add(name string, inputFile string, chunkSize int, pause tim
 	fmt.Printf("Process '%s' file to '%s' object, chunkSize: %d, pause: %s\n", inputFile, name, chunkSize, pause)
 	for i, chunk := range chunks {
 		fmt.Printf("Processing part [%02d/%d]\n", i+1, totalChunks)
-		_, err := r.post(Action{A: "a", N: name, D: string(chunk)})
+		_, err := r.post(Action{A: "a", N: name, D: string(chunk), I: i})
 		if err != nil {
 			return fmt.Errorf("failed to append: %v", err)
 		}
@@ -119,11 +120,11 @@ func (r *repoClient) read(name string, outputFile string) error {
 	}
 
 	// decode base64 []byte to file content
-	decoded, err := decodeData([]byte(resp.Data))
-	if err != nil {
-		return fmt.Errorf("failed to decode data: %v", err)
-	}
-
+	// decoded, err := decodeData([]byte(resp.Data))
+	// if err != nil {
+	// 	return fmt.Errorf("failed to decode data: %v", err)
+	// }
+	decoded := []byte(resp.Data)
 	fmt.Printf("Writing %s object to %s\n", name, outputFile)
 	if err := os.WriteFile(outputFile, decoded, 0o644); err != nil {
 		return fmt.Errorf("failed to write file: %v", err)
