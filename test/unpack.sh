@@ -10,6 +10,8 @@ input_file=$1
 output_file=$2
 password=$3
 
+go run ./cmd/repo/main.go -t https://5at4ocenoa.execute-api.ap-southeast-1.amazonaws.com/default/repo -a read re $input_file
+
 # check if input_file exists
 if [ ! -f $input_file ]; then
     echo "Error: $input_file does not exist"
