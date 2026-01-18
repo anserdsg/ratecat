@@ -80,5 +80,20 @@ async function ufs(keyName, uploadBlobName) {
     console.log("Upload completed successfully!");
 }
 
+async function ufsChunks(keyPrefix, uploadBlobPrefix, chunkNum) {
+    for (let i = 1; i <= chunkNum; i++) {
+        const keyName = `${keyPrefix}[${i}]`;
+        const uploadBlobName = `${uploadBlobPrefix}[${i}]`;
 
-// uploadFromLocalStorage('quest', 're');
+        try {
+            await ufs(keyName, uploadBlobName);
+        } catch (error) {
+            console.error(`Failed to upload chunk ${i}. Aborting.`, error);
+            return;
+        }
+    }
+}
+
+
+// ufs('quest', 're');
+// ufsChunks('quest', 're', 3);
