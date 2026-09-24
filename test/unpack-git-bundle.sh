@@ -21,7 +21,7 @@ if [ ! -d "$output_dir" ]; then
     mkdir -p "$output_dir"
 else
     # remove existing patch files
-    find "$output_dir" -maxdepth 1 -name "*.patch" -type f -delete
+    find "$output_dir" -maxdepth 1 -name "*.bundle" -type f -delete
 fi
 
 temp_encrypted=$(mktemp)
